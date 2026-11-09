@@ -7,6 +7,7 @@ public class PedidoDomicilio extends Pedido {
     public PedidoDomicilio(int codigo, Date fecha, EstadoPedido estadoPedido, double distancia, IEmpresaTransporte iEmpresaTransporte) {
         super(codigo, fecha, estadoPedido);
         this.distancia = distancia;
+        this.iEmpresaTransporte = iEmpresaTransporte;
     }
 
     public double getDistancia() {

@@ -15,6 +15,7 @@ public class Pedido {
         this.estadoPedido = estadoPedido;
         this.compras = new ArrayList<>();
     }
+    public List<DetalleCompra> getCompras() {return compras;}
 
     public EstadoPedido getEstadoPedido() {
         return estadoPedido;
