@@ -1,21 +1,22 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class DetalleCompra {
+
     private double valorTotal;
-    private List<Producto> productos;
+    private Producto producto;
+    private int cantidad;
+
+    public DetalleCompra(Producto producto, int cantidad) {
+        this.producto = producto;
+        this.cantidad = cantidad;
+        if (producto != null) {
+            this.valorTotal = producto.calcularRecargo(producto.getPrecioBase()) * cantidad;
+        } else {
+            this.valorTotal = 0.0;
+        }
+    }
 
     public DetalleCompra(double valorTotal) {
         this.valorTotal = valorTotal;
-        this.productos = new ArrayList<>();
-    }
-
-    public List<Producto> getProductos() {
-        return productos;
-    }
-
-    public void setProductos(List<Producto> productos) {
-        this.productos = productos;
+        this.cantidad = 1;
     }
 
     public double getValorTotal() {
@@ -26,12 +27,31 @@ public class DetalleCompra {
         this.valorTotal = valorTotal;
     }
 
-    //Hacer método de valor total
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+        if (producto != null) {
+            this.valorTotal = producto.calcularRecargo(producto.getPrecioBase()) * this.cantidad;
+        }
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+        if (this.producto != null) {
+            this.valorTotal = this.producto.calcularRecargo(this.producto.getPrecioBase()) * cantidad;
+        }
+    }
 
     @Override
     public String toString() {
-        return "DetalleCompra: " +
-                "valorTotal: " + valorTotal+
-                ", productos: " + productos;
+        String nombreProd = (producto != null) ? producto.getNombre() : "Sin producto";
+        return "DetalleCompra: " + nombreProd + " x" + cantidad + " | valorTotal: $" + valorTotal;
     }
 }
