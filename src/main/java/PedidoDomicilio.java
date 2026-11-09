@@ -2,8 +2,9 @@ import java.sql.Date;
 
 public class PedidoDomicilio extends Pedido {
     private double distancia;
+    private IEmpresaTransporte iEmpresaTransporte;
 
-    public PedidoDomicilio(int codigo, Date fecha, EstadoPedido estadoPedido, double distancia) {
+    public PedidoDomicilio(int codigo, Date fecha, EstadoPedido estadoPedido, double distancia, IEmpresaTransporte iEmpresaTransporte) {
         super(codigo, fecha, estadoPedido);
         this.distancia = distancia;
     }
@@ -16,9 +17,19 @@ public class PedidoDomicilio extends Pedido {
         this.distancia = distancia;
     }
 
+    public IEmpresaTransporte getiEmpresaTransporte() {
+        return iEmpresaTransporte;
+    }
+
+    public void setiEmpresaTransporte(IEmpresaTransporte iEmpresaTransporte) {
+        this.iEmpresaTransporte = iEmpresaTransporte;
+    }
+
     @Override
     public String toString() {
-        return "PedidoDomicilio: " + super.toString()+
-                ", distancia: " + distancia;
+        return "Pedido Domicilio\n" +
+                super.toString()+
+                ", Distancia: " + distancia+
+                ", Empresa transporte: "+ iEmpresaTransporte;
     }
 }
