@@ -42,9 +42,8 @@ public class Pedido {
 
     @Override
     public String toString() {
-        return "Pedido: " +"\n"+
-                "codigo: " + codigo +
-                ", fecha: " + fecha +
-                ", estadoPedido: " + estadoPedido;
+        return  "Código: " + codigo +
+                ", Fecha: " + fecha +
+                ", Estado pedido: " + estadoPedido;
     }
 }
