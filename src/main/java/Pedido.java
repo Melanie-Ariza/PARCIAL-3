@@ -45,6 +45,7 @@ public class Pedido {
         return "Pedido: " +"\n"+
                 "codigo: " + codigo +
                 ", fecha: " + fecha +
-                ", estadoPedido: " + estadoPedido;
+                ", estadoPedido: " + estadoPedido+
+                ", compras: " + compras;
     }
 }
