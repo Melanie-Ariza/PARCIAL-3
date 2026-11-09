@@ -1,4 +1,4 @@
 public enum TipoBebida {
-    FRIO,
+    FRIA,
     CALIENTE
 }

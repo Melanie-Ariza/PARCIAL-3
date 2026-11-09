@@ -55,12 +55,30 @@ public class Bebida extends Producto{
     }
 
     @Override
-    public double calcularRecargo() {
-        return 0;
+    public double calcularRecargo(double precioBase) {
+
+        return precioBase * 1.10;
     }
 
-    @Override
-    public boolean verificarCalidadProducto() {
-        return false;
+    public double calcularRecargoEspecial(boolean esEspecial, double precioRecargo){
+        double recargoEspecial= 0;
+        if (esEspecial){
+            recargoEspecial= precioRecargo + 3000;
+        }
+        return recargoEspecial;
+    }
+
+    public boolean verificarCalidadBebida(TipoBebida tipoBebida, double volumen, int temperaturaServicio) {
+        boolean esDeCalidad= false;
+        if (tipoBebida == TipoBebida.FRIA){
+            if (volumen>=150 && volumen<=1500 && temperaturaServicio>=0 && temperaturaServicio<=10){
+                esDeCalidad=true;
+            }
+        } else if (tipoBebida == TipoBebida.CALIENTE) {
+            if (volumen>=150 && volumen<=1500 && temperaturaServicio>=55 && temperaturaServicio<=85){
+                esDeCalidad=true;
+            }
+        }
+        return esDeCalidad;
     }
 }

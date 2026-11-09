@@ -44,12 +44,16 @@ public class PlatoFuerte extends Producto{
     }
 
     @Override
-    public double calcularRecargo() {
-        return 0;
+    public double calcularRecargo(double precioBase) {
+
+        return precioBase * 1.20;
     }
 
-    @Override
-    public boolean verificarCalidadProducto() {
-        return false;
+    public boolean verificarCalidadPlatoFuerte(double peso, int tiempoPreparacion, boolean controlCoccion) {
+        boolean esDeCalidad= false;
+        if (peso>=200 && peso<=900 && tiempoPreparacion>=10 && tiempoPreparacion<=60 && controlCoccion){
+            esDeCalidad=true;
+        }
+        return esDeCalidad;
     }
 }

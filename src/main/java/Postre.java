@@ -44,12 +44,30 @@ public class Postre extends Producto{
     }
 
     @Override
-    public double calcularRecargo() {
-        return 0;
+    public double calcularRecargo(double precioBase) {
+        return precioBase * 1.15;
     }
 
-    @Override
-    public boolean verificarCalidadProducto() {
-        return false;
+    public double calcularRecargoRefrigerado(boolean esRefrigerado, double precioBase){
+        double recargoRefrigerado= 0;
+        if (esRefrigerado){
+            recargoRefrigerado= precioBase * 1.20;
+        }
+        return recargoRefrigerado;
     }
+
+    public boolean verificarCalidadPostre(double peso, int temperaturaAlmacenamiento, boolean controlCoccion) {
+        boolean esDeCalidad= false;
+        if (esRefrigerado){
+            if (peso>=80 && peso<=500 && temperaturaAlmacenamiento>=0 && temperaturaAlmacenamiento<=6){
+                esDeCalidad=true;
+            }
+        } else{
+            if (peso>=80 && peso<=500 && temperaturaAlmacenamiento>=15 && temperaturaAlmacenamiento<=30){
+                esDeCalidad=true;
+            }
+        }
+        return esDeCalidad;
+    }
+
 }

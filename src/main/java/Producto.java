@@ -62,6 +62,5 @@ public abstract class Producto {
                 ", Tiempo de preparacion: " + tiempoPreparacion;
     }
 
-    public abstract double calcularRecargo();
-    public abstract boolean verificarCalidadProducto();
+    public abstract double calcularRecargo(double precioBase);
 }
