@@ -3,7 +3,7 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Aplicacion {
-    static void main() {
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Restaurante restaurante = new Restaurante("Sabor & Tradición", 123, "Armenia, Quindío");
 

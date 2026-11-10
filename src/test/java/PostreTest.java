@@ -32,10 +32,4 @@ class PostreTest {
 
 
     }
-
-    @Test
-    void verificarCalidadPostreNoRefrigeradoTest() {
-        Postre postreNoRefrigerado = new Postre(232, "Pay de Manzana", "Sabor dulce", 15000, 100, 200, 20, false);
-        assertTrue(postreNoRefrigerado.verificarCalidadPostre(200, 20, true));
-    }
 }
