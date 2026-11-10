@@ -43,11 +43,6 @@ public class Postre extends Producto{
                 ", Es refrigerado: " + esRefrigerado;
     }
 
-    @Override
-    public double calcularRecargo(double precioBase) {
-        return precioBase * 1.15;
-    }
-
     public double calcularRecargoRefrigerado(boolean esRefrigerado, double precioBase){
         double recargoRefrigerado= 0;
         if (esRefrigerado){
@@ -56,7 +51,18 @@ public class Postre extends Producto{
         return recargoRefrigerado;
     }
 
-    public boolean verificarCalidadPostre(double peso, int temperaturaAlmacenamiento, boolean controlCoccion) {
+    @Override
+    public double calcularValorFinal(Producto producto) {
+        double precioVenta=0;
+        if (((Postre) producto).esRefrigerado){
+            precioVenta= calcularRecargoRefrigerado(((Postre) producto).esRefrigerado, producto.getPrecioBase());
+        }else{
+            precioVenta= producto.getPrecioBase()*1.15;
+        }
+        return precioVenta;
+    }
+
+    public boolean verificarCalidadPostre(double peso, int temperaturaAlmacenamiento) {
         boolean esDeCalidad= false;
         if (esRefrigerado){
             if (peso>=80 && peso<=500 && temperaturaAlmacenamiento>=0 && temperaturaAlmacenamiento<=6){

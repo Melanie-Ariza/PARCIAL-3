@@ -10,7 +10,6 @@ public class Restaurante {
     private List<Producto> listaProductos;
     private List<Pedido> listaPedidos;
 
-    // Constructor completo
     public Restaurante(String nombre, int nit, String direccion) {
         this.nombre = nombre;
         this.nit = nit;
@@ -20,46 +19,86 @@ public class Restaurante {
         this.listaPedidos = new ArrayList<>();
     }
 
+    public String getNombre() {return nombre;}
+
+    public void setNombre(String nombre) {this.nombre = nombre;}
+
+    public int getNit() {return nit;}
+
+    public void setNit(int nit) {this.nit = nit;}
+
+    public String getDireccion() {return direccion;}
+
+    public void setDireccion(String direccion) {this.direccion = direccion;}
+
+    public List<Cliente> getListaClientes() {return listaClientes;}
+
+    public List<Producto> getListaProductos() {return listaProductos;}
+
+    public List<Pedido> getListaPedidos() {return listaPedidos;}
+
+    @Override
+    public String toString() {
+        return "Restaurante\n" +
+                "Nombre: " + nombre +
+                ", NIT: " + nit +
+                ", Dirección" + direccion +
+                ", Lista clientes:" + listaClientes +
+                ", Lista productos:" + listaProductos +
+                ", Lista pedidos:" + listaPedidos;
+    }
 
     // metodo agrearcliente
     public boolean agregarCliente(Cliente cliente) {
+        boolean agregado= true;
         for (Cliente c : listaClientes) {
             if (c.getDocumento() == cliente.getDocumento()) {
-                return false;
+                agregado= false;
             }
         }
         listaClientes.add(cliente);
-        return true;
+        return agregado;
     }
 
     //metodo de agregarproducto
     public boolean agregarProducto(Producto producto) {
+        boolean agregado= true;
         for (Producto p : listaProductos) {
             if (p.getCodigo() == producto.getCodigo()) {
-                return false;
+                agregado= false;
             }
         }
         listaProductos.add(producto);
-        return true;
+        return agregado;
+    }
+
+    //metodo mostrar producto
+    public Producto mostrarProducto(int codigo){
+        Producto producto= null;
+        for (Producto producto1: listaProductos){
+            if (producto.getCodigo()== codigo){
+                producto= producto1;
+            }
+        }
+        return  producto;
     }
 
     //metodo de agregarpedido
     public boolean agregarPedido(Pedido pedido) {
+        boolean agregado= true;
         for (Pedido p : listaPedidos) {
             if (p.getCodigo() == pedido.getCodigo()) {
-                return false;
+                agregado= false;
             }
         }
         listaPedidos.add(pedido);
-        return true;
+        return agregado;
     }
     //Calcular ingresos totales sin pedidos cancelados o pendientes
     public double calcularIngresosTotales() {
         double ingresosTotales = 0.0;
         for (Pedido pedido : listaPedidos) {
-            if (pedido.getEstadoPedido() != EstadoPedido.CANCELADO &&
-                    pedido.getEstadoPedido() != EstadoPedido.PENDIENTE) {
-
+            if (pedido.getEstadoPedido() != EstadoPedido.CANCELADO && pedido.getEstadoPedido() != EstadoPedido.PENDIENTE) {
                 for (DetalleCompra detalle : pedido.getCompras()) {
                     ingresosTotales += detalle.getValorTotal();
                 }
@@ -70,8 +109,9 @@ public class Restaurante {
 
     // Calcular el producto más vendido
     public String obtenerProductoMasVendido() {
+        String mensaje="";
         if (listaProductos.isEmpty()) {
-            return "No hay productos registrados en el menú.";
+            mensaje= "No hay productos registrados en el menú.";
         }
 
         int maxCantidad = -1;
@@ -100,14 +140,16 @@ public class Restaurante {
         }
 
         if (maxCantidad > 0) {
-            return "Producto más vendido: " + nombreMasVendido + " [Código: " + codigoMasVendido + "] con " + maxCantidad + " unidades.";
+            mensaje= "Producto más vendido: " + nombreMasVendido + " [Código: " + codigoMasVendido + "] con " + maxCantidad + " unidades.";
         } else {
-            return "Aún no se han registrado ventas de productos en los pedidos.";
+            mensaje= "Aún no se han registrado ventas de productos en los pedidos.";
         }
+        return mensaje;
     }
 
     // Categoría de producto con mayores ingresos
     public String determinarCategoriaMayorIngresos() {
+        String mensaje="";
         double ingresosPlatoFuerte = 0.0;
         double ingresosBebidas = 0.0;
         double ingresosPostres = 0.0;
@@ -134,34 +176,16 @@ public class Restaurante {
         }
 
         if (ingresosPlatoFuerte == 0 && ingresosBebidas == 0 && ingresosPostres == 0) {
-            return "Ninguna (Aún no hay ventas registradas)";
+            mensaje= "Ninguna (Aún no hay ventas registradas)";
         }
 
         if (ingresosPlatoFuerte >= ingresosBebidas && ingresosPlatoFuerte >= ingresosPostres) {
-            return "Plato Fuerte (Ingresos: $" + ingresosPlatoFuerte + ")";
+            mensaje=  "Plato Fuerte (Ingresos: $" + ingresosPlatoFuerte + ")";
         } else if (ingresosBebidas >= ingresosPlatoFuerte && ingresosBebidas >= ingresosPostres) {
-            return "Bebidas (Ingresos: $" + ingresosBebidas + ")";
+            mensaje= "Bebidas (Ingresos: $" + ingresosBebidas + ")";
         } else {
-            return "Postres (Ingresos: $" + ingresosPostres + ")";
+            mensaje= "Postres (Ingresos: $" + ingresosPostres + ")";
         }
+        return mensaje;
     }
-    
-
-    public String getNombre() {return nombre;}
-
-    public void setNombre(String nombre) {this.nombre = nombre;}
-
-    public int getNit() {return nit;}
-
-    public void setNit(int nit) {this.nit = nit;}
-
-    public String getDireccion() {return direccion;}
-
-    public void setDireccion(String direccion) {this.direccion = direccion;}
-
-    public List<Cliente> getListaClientes() {return listaClientes;}
-
-    public List<Producto> getListaProductos() {return listaProductos;}
-
-    public List<Pedido> getListaPedidos() {return listaPedidos;}
 }

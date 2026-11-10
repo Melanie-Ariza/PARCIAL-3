@@ -15,7 +15,7 @@ class PostreTest {
 
     @Test
     void calcularRecargoTest() {
-        double recargo = postre.calcularRecargo(10000);
+        double recargo = postre.calcularValorFinal(postre);
         assertEquals(11500.0, recargo, 0.001);
     }
 

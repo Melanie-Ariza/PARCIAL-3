@@ -54,12 +54,6 @@ public class Bebida extends Producto{
                 ", Tipo bebida: "+tipoBebida;
     }
 
-    @Override
-    public double calcularRecargo(double precioBase) {
-
-        return precioBase * 1.10;
-    }
-
     public double calcularRecargoEspecial(boolean esEspecial, double precioRecargo){
         double recargoEspecial= 0;
         if (esEspecial){
@@ -68,7 +62,20 @@ public class Bebida extends Producto{
         return recargoEspecial;
     }
 
-    public boolean verificarCalidadBebida(TipoBebida tipoBebida, double volumen, int temperaturaServicio) {
+    @Override
+    public double calcularValorFinal(Producto producto) {
+        double precioVenta= 0;
+        double precioRecargo= producto.getPrecioBase() * 1.10;
+
+        if (((Bebida) producto).esEspecial){
+            precioVenta= calcularRecargoEspecial(((Bebida) producto).esEspecial, precioRecargo);
+        }else {
+            precioVenta= precioRecargo;
+        }
+        return precioVenta;
+    }
+
+    public boolean verificarCalidadBebida(TipoBebida tipoBebida, double volumen, double temperaturaServicio) {
         boolean esDeCalidad= false;
         if (tipoBebida == TipoBebida.FRIA){
             if (volumen>=150 && volumen<=1500 && temperaturaServicio>=0 && temperaturaServicio<=10){

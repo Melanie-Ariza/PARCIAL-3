@@ -8,7 +8,7 @@ class PlatoFuerteTest {
 
     @Test
     void calcularRecargoTest() {
-        double recargo = plato.calcularRecargo(20000);
+        double recargo = plato.calcularValorFinal(plato);
         assertEquals(24000.0, recargo, 0.001);
     }
 

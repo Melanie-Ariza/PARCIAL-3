@@ -8,7 +8,7 @@ class BebidaTest {
 
     @Test
     void calcularRecargoTest() {
-        double recargo = bebida.calcularRecargo(10000);
+        double recargo = bebida.calcularValorFinal(bebida);
         assertEquals(11000.0, recargo, 0.001);
     }
 
