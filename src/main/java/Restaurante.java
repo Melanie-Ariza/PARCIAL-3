@@ -1,5 +1,9 @@
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+
 public class Restaurante {
     private String nombre;
     private int nit;
@@ -60,6 +64,17 @@ public class Restaurante {
         return agregado;
     }
 
+    //metodo mostrar cliente
+    public Cliente mostrarCliente(int documento){
+        Cliente cliente= null;
+        for (Cliente cliente1: listaClientes){
+            if (cliente1.getDocumento()== documento){
+                cliente= cliente1;
+            }
+        }
+        return  cliente;
+    }
+
     //metodo de agregarproducto
     public boolean agregarProducto(Producto producto) {
         boolean agregado= true;
@@ -76,14 +91,14 @@ public class Restaurante {
     public Producto mostrarProducto(int codigo){
         Producto producto= null;
         for (Producto producto1: listaProductos){
-            if (producto.getCodigo()== codigo){
+            if (producto1.getCodigo()== codigo){
                 producto= producto1;
             }
         }
         return  producto;
     }
 
-    //metodo de agregarpedido
+    //metodo de agregar pedido
     public boolean agregarPedido(Pedido pedido) {
         boolean agregado= true;
         for (Pedido p : listaPedidos) {
@@ -94,20 +109,52 @@ public class Restaurante {
         listaPedidos.add(pedido);
         return agregado;
     }
-    //Calcular ingresos totales sin pedidos cancelados o pendientes
+
+    //metodo mostrar pedido
+    public Pedido mostrarPedido(int codigo){
+        Pedido pedido= null;
+        for (Pedido pedido1: listaPedidos){
+            if (pedido1.getCodigo()== codigo){
+                pedido= pedido1;
+            }
+        }
+        return  pedido;
+    }
+
+    //metodo actualizar estado pedido
+    public boolean actualizarEstadoPedido(Pedido pedido, int opcionEstado){
+        boolean actualizado=false;
+        EstadoPedido estadoPedido= pedido.getEstadoPedido();
+        if (opcionEstado==1){
+            pedido.setEstadoPedido(EstadoPedido.PENDIENTE);
+            actualizado=true;
+        } else if (opcionEstado==2) {
+            pedido.setEstadoPedido(EstadoPedido.CONFIRMADO);
+            actualizado=true;
+        }else if (opcionEstado==3) {
+            pedido.setEstadoPedido(EstadoPedido.ENTREGADO);
+            actualizado=true;
+        }else if (opcionEstado==4) {
+            pedido.setEstadoPedido(EstadoPedido.CANCELADO);
+            actualizado=true;
+        }
+        return actualizado;
+    }
+
+    //Calcular ingresos totales sin pedidos cancelados o pendientes o el domicilio
     public double calcularIngresosTotales() {
-        double ingresosTotales = 0.0;
+        double ingresosTotales = 0;
         for (Pedido pedido : listaPedidos) {
             if (pedido.getEstadoPedido() != EstadoPedido.CANCELADO && pedido.getEstadoPedido() != EstadoPedido.PENDIENTE) {
                 for (DetalleCompra detalle : pedido.getCompras()) {
-                    ingresosTotales += detalle.getValorTotal();
+                    ingresosTotales += detalle.calcularSubTotal();
                 }
             }
         }
         return ingresosTotales;
     }
 
-    // Calcular el producto más vendido
+    // obtener el producto más vendido
     public String obtenerProductoMasVendido() {
         String mensaje="";
         if (listaProductos.isEmpty()) {
@@ -161,7 +208,7 @@ public class Restaurante {
                 for (DetalleCompra detalle : pedido.getCompras()) {
                     Producto producto = detalle.getProducto();
                     if (producto != null) {
-                        double valorDetalle = detalle.getValorTotal();
+                        double valorDetalle = detalle.calcularSubTotal();
 
                         if (producto instanceof PlatoFuerte) {
                             ingresosPlatoFuerte += valorDetalle;
@@ -187,5 +234,107 @@ public class Restaurante {
             mensaje= "Postres (Ingresos: $" + ingresosPostres + ")";
         }
         return mensaje;
+    }
+
+    //Calcular valor total pedido
+    public double calcularValorTotalPedido(int codigo){
+        double valorTotal=0;
+        double subTotal=0;
+
+        for (Pedido pedido1: listaPedidos){
+            if (pedido1.getCodigo()== codigo){
+                for (DetalleCompra detalle: pedido1.getCompras()){
+                    subTotal= detalle.calcularSubTotal();
+                    valorTotal+=subTotal;
+                }
+            }
+        }
+        return valorTotal;
+    }
+
+    public void comenzarPedido(Cliente cliente) {
+        Scanner sc = new Scanner(System.in);
+        int opcion = 1;
+
+        System.out.print("Ingrese código de pedido: ");
+        int codigo = sc.nextInt();
+
+        System.out.print("¿Es un pedido a domicilio? (1: Sí / 2: No): ");
+        int tipoPedido = sc.nextInt();
+
+        Pedido pedido;
+
+        if (tipoPedido == 1) {
+            System.out.print("Ingrese la distancia en km: ");
+            double distancia = sc.nextDouble();
+
+            System.out.println("Seleccione la empresa de transporte:");
+            System.out.println("1. Rápido Express");
+            System.out.println("2. Entrega Segura");
+            int opcionEmpresa = sc.nextInt();
+
+            IEmpresaTransporte empresaTransporte;
+            if (opcionEmpresa == 1) {
+                empresaTransporte = new RapidoExpress();
+            } else {
+                empresaTransporte = new EntregaSegura();
+            }
+
+            // Se instancia como PedidoDomicilio polimórficamente
+            pedido = new PedidoDomicilio(codigo, Date.valueOf(LocalDate.now()), EstadoPedido.PENDIENTE, distancia, empresaTransporte);
+        } else {
+            pedido = new Pedido(codigo, Date.valueOf(LocalDate.now()), EstadoPedido.PENDIENTE);
+        }
+
+        do {
+            for (Producto producto : listaProductos) {
+                System.out.println(producto);
+            }
+
+            System.out.print("Ingrese el código del producto que desea: ");
+            int codigoProducto = sc.nextInt();
+
+            boolean encontrado = false;
+            for (Producto producto : listaProductos) {
+                if (producto.getCodigo() == codigoProducto) {
+                    System.out.print("¿Qué cantidad desea?: ");
+                    int cantidadDeseada = sc.nextInt();
+
+                    DetalleCompra nuevoDetalle = new DetalleCompra(producto, cantidadDeseada);
+                    pedido.getCompras().add(nuevoDetalle);
+
+                    System.out.println("Hecho.");
+                    encontrado = true;
+                    break;
+                }
+            }
+
+            if (!encontrado) {
+                System.out.println("Producto no encontrado.");
+            }
+
+            System.out.println("¿Desea continuar comprando? (1: Sí / 2: No)");
+            opcion = sc.nextInt();
+        } while (opcion != 2);
+
+        double valorFinal = 0;
+        for (DetalleCompra detalle : pedido.getCompras()) {
+            valorFinal += detalle.calcularSubTotal();
+        }
+
+        if (pedido instanceof PedidoDomicilio) {
+            PedidoDomicilio pedidoDomicilio = (PedidoDomicilio) pedido;
+            double costoDomicilio = pedidoDomicilio.getiEmpresaTransporte().calcularCosto(pedidoDomicilio.getDistancia());
+            valorFinal += costoDomicilio;
+            System.out.println("Costo del domicilio: " + costoDomicilio);
+        }
+
+        System.out.println("Valor total del pedido (con domicilio incluido si aplica): " + valorFinal);
+
+        if (agregarPedido(pedido)){
+            System.out.println("Pedido creado correctamente.");
+        } else {
+            System.out.println("Código de pedido ya existente.");
+        }
     }
 }

@@ -176,14 +176,7 @@ public class Aplicacion {
                     codigo= sc.nextInt();
                     Producto producto= restaurante.mostrarProducto(codigo);
 
-                    double precioVenta=0;
-                    if (producto instanceof PlatoFuerte){
-                        precioVenta= producto.calcularValorFinal(producto);
-                    } else if (producto instanceof Bebida){
-                        precioVenta= producto.calcularValorFinal(producto);
-                    } else if (producto instanceof  Postre){
-                        precioVenta= producto.calcularValorFinal(producto);
-                    }
+                    double precioVenta=producto.calcularValorFinal(producto);
                     System.out.println("El precio de venta del producto es de: "+ precioVenta);
                     break;
                 case 4:
@@ -214,22 +207,96 @@ public class Aplicacion {
                     break;
                 case 5:
                     System.out.println("------- Consultar productos -------\n");
-                    
+
+                    for (Producto producto0: restaurante.getListaProductos()){
+                        precioVenta= producto0.calcularValorFinal(producto0);
+                        System.out.println(producto0 + ", Precio venta: "+precioVenta);
+                    }
                     break;
                 case 6:
                     System.out.println("------- Empezar pedido -------\n");
 
+                    System.out.print("Ingrese el documento del cliente: ");
+                    documento= sc.nextInt();
+                    cliente= restaurante.mostrarCliente(documento);
+
+                    if (cliente!=null){
+                        restaurante.comenzarPedido(cliente);
+                    }else {
+                        System.out.println("Cliente no encontrado. Debe registrarse antes de comprar.");
+                    }
                     break;
                 case 7:
                     System.out.println("------- Actualizar y consultar estado de pedido -------\n");
 
+                    System.out.print("Ingrese el código del pedido: ");
+                    codigo= sc.nextInt();
+
+                    for (Pedido pedido: restaurante.getListaPedidos()){
+                        if (pedido.getCodigo()== codigo){
+                            Pedido pedido0= restaurante.mostrarPedido(codigo);
+                            System.out.println(pedido0);
+
+                            System.out.print("¿Desea actualizar el estado del pedido?(1. Sí / 2. No): ");
+                            int decision= sc.nextInt();
+
+                            if (decision==1){
+                                System.out.println("1. Pendiente\n2. Confirmado\n3. Entregado\n4. Cancelado");
+                                System.out.print("Seleccione el nuevo estado de pedido: ");
+                                int opcionEstado= sc.nextInt();
+
+                                if (opcionEstado>=1 && opcionEstado<=4){
+                                    boolean estadoActualizado= restaurante.actualizarEstadoPedido(pedido, opcionEstado);
+                                    if (estadoActualizado){
+                                        System.out.println("Estado de pedido actualizado correctamente.");
+                                    }else {
+                                        System.out.println("El estado del pedido no se pudo actualizar.");
+                                    }
+                                }else {
+                                    System.out.println("Opción no valida.");
+                                }
+
+                            }else {
+                                System.out.println("Hecho");
+                            }
+                        }
+                    }
                     break;
                 case 8:
                     System.out.println("------- Consultar pedidos por cliente -------\n");
 
+                    System.out.print("Ingrese el documento del cliente: ");
+                    documento= sc.nextInt();
+
+                    for (Cliente cliente0: restaurante.getListaClientes()){
+                        if (cliente0.getDocumento()==documento){
+                            for (Pedido pedido: restaurante.getListaPedidos()){
+                                System.out.println(pedido);
+                            }
+                        }
+                    }
                     break;
                 case 9:
                     System.out.println("------- Reporte de ventas del restaurante -------");
+
+                    System.out.println("1. Ingresos totales del restaurante.");
+                    System.out.println("2. Producto con mayor cantidad de unidades vendidas.");
+                    System.out.println("3. Categoría con mayor cantidad de ingresos.");
+                    System.out.println("Ingrese la opción que desea visualizar: ");
+                    int opcionReporte= sc.nextInt();
+
+                    if (opcionReporte==1){
+                        double ingresosTotales= restaurante.calcularIngresosTotales();
+                        System.out.println("Los ingresos totales del restaurante son: "+ ingresosTotales);
+                    } else if (opcionReporte==2) {
+                        String productoMasVendido= restaurante.obtenerProductoMasVendido();
+                        System.out.println(productoMasVendido);
+                    } else if (opcionReporte==3) {
+                        String categoriaMayorIngresos= restaurante.determinarCategoriaMayorIngresos();
+                        System.out.println(categoriaMayorIngresos);
+                    }else {
+                        System.out.println("Opción no valida.");
+                    }
                     break;
                 default:
                     System.out.println("Opción no valida.");

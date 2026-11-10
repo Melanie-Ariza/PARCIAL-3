@@ -15,7 +15,6 @@ public class Pedido {
         this.estadoPedido = estadoPedido;
         this.compras = new ArrayList<>();
     }
-    public List<DetalleCompra> getCompras() {return compras;}
 
     public EstadoPedido getEstadoPedido() {
         return estadoPedido;
@@ -41,12 +40,19 @@ public class Pedido {
         this.fecha = fecha;
     }
 
+    public List<DetalleCompra> getCompras() {return compras;}
+
+    public void setCompras(List<DetalleCompra> compras) {
+
+        this.compras = compras;
+    }
+
     @Override
     public String toString() {
         return "Pedido: " +"\n"+
-                "codigo: " + codigo +
-                ", fecha: " + fecha +
-                ", estadoPedido: " + estadoPedido+
-                ", compras: " + compras;
+                "Código: " + codigo +
+                ", Fecha: " + fecha +
+                ", Estado pedido: " + estadoPedido+
+                ", Detalles del pedido: " + compras;
     }
 }
